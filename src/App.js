@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { inject, observer } from "mobx-react";
 import './App.css';
 
+import Item from './Item';
+
 class App extends Component {
+  componentDidMount() {
+    this.props.itemStore.fetchTopStories();
+  }
+  
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
+    const firstThirtyItems = this.props.itemStore.topStories.slice(0,30);
+    return <div className="App">
+        {firstThirtyItems.map(id => <Item id={id} key={id} />)}
+      </div>;
   }
 }
 
-export default App;
+export default inject("itemStore")(observer(App));

@@ -1,0 +1,19 @@
+.card {
+  background: hsla(0, 0%, 4%, 1);
+  margin-bottom: 10px;
+  padding: 13px 20px;
+  border-radius: 4px;
+  border: 1px solid #000;
+}
+
+.title {
+  margin-bottom: 3px;
+}
+
+.meta {
+  font-size: 13px;
+}
+
+.meta a {
+  color: #a3a3a3;
+}

@@ -1,5 +1,15 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: Menlo, Courier, monospaced;
+  color: #a3a3a3;
+  background: hsla(0, 0%, 15%, 1);
+}
+
+a {
+  color: #fd6923;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
