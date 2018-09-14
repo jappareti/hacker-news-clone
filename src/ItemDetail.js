@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import {Link} from "react-router-dom";
-
 import moment from "moment";
 
 import "./Item.css";
 
 class Item extends Component {
   componentDidMount() {
-    this.props.itemStore.fetchItem(this.props.id);
+    const { id } = this.props.match.params;
+    this.props.itemStore.fetchItem(id);
   }
   render() {
-    const { id } = this.props;
+    const { id } = this.props.match.params;
     const item = this.props.itemStore.items[id];
     return <div>
         {item === undefined ? <div className="card">
@@ -23,11 +22,11 @@ class Item extends Component {
             <div className="meta">
               <span className="score">{item.score} points</span> <span className="author">
                 by {item.by}
-              </span> <Link to={`/item/${item.id}`} className="time">
+              </span> <a href={item.id} className="time">
               {moment.unix(item.time).fromNow()}
-              </Link> | <Link to={`/item/${item.id}`} className="comments-link">
+              </a> | <a href={item.id} className="comments-link">
                 {item.descendants} comments
-              </Link>
+              </a>
             </div>
           </div>}
       </div>;

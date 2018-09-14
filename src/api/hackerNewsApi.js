@@ -12,7 +12,7 @@ class HackerNewsApi {
       .then(response => response)
       .catch(error => error);
 
-  fetchNewStories = () =>
+  fetchNewestStories = () =>
     fetch(`${this.URL}/newstories.json`)
       .then(handleErrors)
       .then(response => response)

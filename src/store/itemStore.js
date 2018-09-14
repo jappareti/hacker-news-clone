@@ -1,11 +1,10 @@
-import { configure, decorate, observable, computed, action, flow } from "mobx";
-// import Item from "./ItemModel";
+import { configure, decorate, observable, flow } from "mobx";
 
 configure({ enforceActions: "observed" });
 
 export default class ItemStore {
   items = {};
-  newStories = [];
+  newestStories = [];
   topStories = [];
 
   constructor(hackerNewsApi) {
@@ -22,11 +21,11 @@ export default class ItemStore {
     }
   });
 
-  fetchNewStories = flow(function*() {
+  fetchNewestStories = flow(function*() {
     try {
-      const response = yield this.hackerNewsApi.fetchNewStories();
+      const response = yield this.hackerNewsApi.fetchNewestStories();
       const data = yield response.json();
-      this.newStories = data;
+      this.newestStories = data;
     } catch (error) {
       console.log(error);
     }
@@ -44,6 +43,6 @@ export default class ItemStore {
 }
 decorate(ItemStore, {
   items: observable,
-  newStories: observable,
+  newestStories: observable,
   topStories: observable,
 });
