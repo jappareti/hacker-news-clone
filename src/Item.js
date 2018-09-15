@@ -55,7 +55,7 @@ class Item extends Component {
         { this.props.thread &&
           item.kids !== undefined &&
           item.kids.length > 0 &&
-          item.kids.map(id => console.log(id) || <Item key={id} id={id} thread />)}
+          item.kids.map(id => <Item key={id} id={id} thread />)}
       </div>
     );
   }
