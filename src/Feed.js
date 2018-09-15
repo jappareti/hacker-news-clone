@@ -1,45 +1,48 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+import {fetchStories} from "./api/hackerNewsApi";
 
 import Item from "./Item";
 
 class Feed extends Component {
-  componentDidMount() {
+  state = {
+    stories: [],
+    min: 0,
+    max: 30
+  };
+  async componentDidMount() {
     // Determine which items to fetch based on path
+    let feedType;
     switch (this.props.location.pathname) {
       case "/":
-        this.props.itemStore.fetchTopStories();
+        feedType = "topstories";
         break;
       case "/newest":
-        this.props.itemStore.fetchNewestStories();
+        feedType = "newstories";
         break;
       default:
         break;
+    }
+    try {
+      const response = await fetchStories(feedType);
+      const stories = await response.json();
+      this.setState({ stories });
+    } catch (error) {
+      console.log(error);
     }
   }
 
   render() {
-    // Determine which items to render based on path
-    let itemsToRender = [];
-    switch (this.props.location.pathname) {
-      case "/":
-        itemsToRender = this.props.itemStore.topStories.slice(0, 30);
-        break;
-      case "/newest":
-        itemsToRender = this.props.itemStore.newestStories.slice(0, 30);
-        break;
-      default:
-        break;
-    }
+    const { stories, min, max } = this.state;
 
-    return (
-      <div className="feed">
-        {itemsToRender.map(id => (
-          <Item id={id} key={id} />
-        ))}
-      </div>
-    );
+    if (stories === undefined || stories.length === 0) {
+      return <div>Loading...</div>;
+    }
+    const storiesToRender = stories.slice(min, max);
+    return <div className="feed">
+        {storiesToRender.map(id => <Item id={id} key={id} />)}
+      </div>;
   }
 }
 
-export default inject("itemStore")(observer(Feed));
+export default Feed;
