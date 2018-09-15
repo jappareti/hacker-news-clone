@@ -1,9 +1,10 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Menlo, Courier, monospaced;
-  color: #a3a3a3;
-  background: hsla(0, 0%, 15%, 1);
+  font-family: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, Arial,
+    sans-serif;
+  color: hsla(0, 0%, 20%, 1);
+  background: hsla(38, 15%, 95%, 1);
 }
 
 a {
