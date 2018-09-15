@@ -20,6 +20,15 @@ class Feed extends Component {
       case "/newest":
         feedType = "newstories";
         break;
+      case "/ask":
+        feedType = "askstories";
+        break;
+      case "/show":
+        feedType = "showstories";
+        break;
+      case "/jobs":
+        feedType = "jobstories";
+        break;
       default:
         break;
     }

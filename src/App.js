@@ -23,6 +23,9 @@ class App extends Component {
             <Switch>
               <Route path="/" key="top" exact component={Feed} />
               <Route path="/newest" key="newest" exact component={Feed} />
+              <Route path="/ask" key="ask" exact component={Feed} />
+              <Route path="/show" key="show" exact component={Feed} />
+              <Route path="/jobs" key="jobs" exact component={Feed} />
               <Route
                 path="/item/:id"
                 render={props => (
