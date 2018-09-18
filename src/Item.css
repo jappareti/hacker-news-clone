@@ -21,4 +21,67 @@
 
 .card.comment {
   border: none;
+  padding: 0px 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.comment.text {
+  margin-bottom: 30px;
+}
+
+i.threadline {
+  display: block;
+  height: 100%;
+  width: 50%;
+  border-right: 2px solid rgb(237, 239, 241);
+}
+
+.threadline-container {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  margin-left: -29px;
+  vertical-align: top;
+  width: 16px;
+  bottom: 0px;
+  height: calc(100% - 5px);
+  position: absolute;
+}
+
+.threadline-container:hover > .threadline {
+  border-color: #fd6923;
+}
+
+.card.comment.collapsed > .card {
+  display: none;
+}
+
+.card.comment.collapsed > .comment {
+  display: none;
+}
+
+.card.comment.collapsed i.threadline {
+  border: none;
+  margin: 0px;
+  display: flex;
+  width: 100%;
+}
+
+.card.comment.collapsed i.threadline::before {
+  content: "+";
+  background: #fd6923;
+  border-radius: 17px;
+  padding: 0px;
+  color: #fff;
+  position: absolute;
+  top: -4px;
+  right: -1px;
+  height: 13px;
+  width: 13px;
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  align-items: center;
+  line-height: 9px;
 }

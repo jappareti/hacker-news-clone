@@ -9,7 +9,8 @@ import "./Item.css";
 
 class Item extends Component {
   state = {
-    error: null
+    error: null,
+    collapsed: false
   };
 
   item = {};
@@ -26,6 +27,10 @@ class Item extends Component {
       this.setState({ error });
     }
   }
+  toggleComment = () => {
+    this.setState({collapsed: !this.state.collapsed})
+  }
+  isCollapsed = () => this.state.collapsed ? "collapsed" : "";
   render() {
     const { item } = this;
 
@@ -34,7 +39,10 @@ class Item extends Component {
     }
 
     return (
-      <div className={`card ${item.type}`}>
+      <div className={`card ${item.type} ${this.isCollapsed()}`}>
+        {item.type === "comment" && (
+          <div className="threadline-container" onClick={this.toggleComment}><i className="threadline" /></div>
+        )}
         <div className="title">
           <a href={item.url}>{item.title}</a>
         </div>
@@ -50,13 +58,14 @@ class Item extends Component {
           </Link>
         </div>
         {item.type === "comment" && (
-          <div dangerouslySetInnerHTML={{ __html: item.text }} />
+          <div className="comment text" dangerouslySetInnerHTML={{ __html: item.text }} />
         )}
         { this.props.thread &&
           item.kids !== undefined &&
           item.kids.length > 0 &&
           item.kids.map(id => <Item key={id} id={id} thread />)}
       </div>
+      
     );
   }
 }
