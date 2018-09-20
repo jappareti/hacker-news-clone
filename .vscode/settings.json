@@ -1,0 +1,16 @@
+{
+  // Formats with Prettier when we save
+  "editor.formatOnSave": true,
+  // Turns off Prettier extension for Javscript files since we setup eslint to handle that for us
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  // Allows eslint to fix any found issues if it can
+  "eslint.autoFixOnSave": true,
+  // Always show eslint status
+  "eslint.alwaysShowStatus": true,
+  // Disable Prettier for Javascript files since eslint takes care of those
+  "prettier.disableLanguages": ["js"],
+  // Auto-save files when focus is changed
+  "files.autoSave": "onFocusChange"
+}
