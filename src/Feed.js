@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
-import {fetchStories} from "./api/hackerNewsApi";
+import { fetchStories } from "./api/hackerNewsApi";
 
 import Item from "./Item";
 
@@ -48,9 +47,13 @@ class Feed extends Component {
       return <div>Loading...</div>;
     }
     const storiesToRender = stories.slice(min, max);
-    return <div className="feed">
-        {storiesToRender.map(id => <Item id={id} key={id} />)}
-      </div>;
+    return (
+      <div>
+        {storiesToRender.map(id => (
+          <Item id={id} key={id} />
+        ))}
+      </div>
+    );
   }
 }
 
