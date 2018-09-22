@@ -1,22 +1,32 @@
 import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
-import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-import moment from "moment";
 import { fetchItem } from "./api/hackerNewsApi";
 
-import "./Item.css";
+import Story from "./Story";
+import Comment from "./Comment";
+
+const ItemStyled = styled.div`
+  background: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1em;
+  padding: 0.8em 1em;
+  /* padding-left: calc(100vw - 0.3em); */
+  border-radius: 4px;
+  border: ${props =>
+    props.itemType === "comment" ? "none" : "1px solid rgb(204, 204, 204)"};
+  transition: color 0.5s ease 0s, fill 0.5s ease 0s, box-shadow 0.5s ease 0s;
+  position: relative;
+`;
 
 class Item extends Component {
   state = {
-    error: null,
-    collapsed: false
+    error: null
   };
 
   item = {};
 
   async componentDidMount() {
-    const {id} = this.props
+    const { id } = this.props;
     try {
       const response = await fetchItem(id);
       const item = await response.json();
@@ -27,45 +37,25 @@ class Item extends Component {
       this.setState({ error });
     }
   }
-  toggleComment = () => {
-    this.setState({collapsed: !this.state.collapsed})
-  }
-  isCollapsed = () => this.state.collapsed ? "collapsed" : "";
+
   render() {
     const { item } = this;
 
     if (Object.keys(item).length === 0) {
-      return <div className="card">Loading...</div>;
+      return <ItemStyled>Loading...</ItemStyled>;
+    }
+
+    if (item.type === "comment") {
+      return <Comment item={item} key={item.id} id={item.id} />;
     }
 
     return (
-      <div className={`card ${item.type} ${this.isCollapsed()}`}>
-        {item.type === "comment" && (
-          <div className="threadline-container" onClick={this.toggleComment}><i className="threadline" /></div>
-        )}
-        <div className="title">
-          <a href={item.url}>{item.title}</a>
-        </div>
-        <div className="meta">
-          {item.type !== "comment" && (<span className="score">{item.score} points</span>)}
-          <span className="author">by {item.by}</span>{" "}
-          <Link to={`/item/${item.id}`} className="time">
-            {moment.unix(item.time).fromNow()}
-          </Link>{" "}
-          |{" "}
-          <Link to={`/item/${item.id}`} className="comments-link">
-            {item.descendants} comments
-          </Link>
-        </div>
-        {item.type === "comment" && (
-          <div className="comment text" dangerouslySetInnerHTML={{ __html: item.text }} />
-        )}
-        { this.props.thread &&
-          item.kids !== undefined &&
-          item.kids.length > 0 &&
-          item.kids.map(id => <Item key={id} id={id} thread />)}
-      </div>
-      
+      <Story
+        item={item}
+        id={item.id}
+        key={item.id}
+        thread={this.props.thread}
+      />
     );
   }
 }

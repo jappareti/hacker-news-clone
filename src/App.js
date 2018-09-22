@@ -1,24 +1,29 @@
 import React, { Component } from "react";
 import { Provider } from "mobx-react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import styled from "styled-components";
 
-import HackerNewsApi from "./api/hackerNewsApi";
 import ItemStore from "./store/itemStore";
 
-import "./App.css";
+import { breakpoints, media } from "./theme/globalStyles";
 
 import Nav from "./Nav";
 import Feed from "./Feed";
 import Item from "./Item";
 
-// const hackerNewsApi = new HackerNewsApi();
+const AppWrapper = styled.div`
+  margin: 20px auto;
+  width: 100%;
+  ${media.large`max-width: calc(${breakpoints.large} * 1em);`};
+`;
+
 const itemStore = new ItemStore();
 class App extends Component {
   render() {
     return (
       <BrowserRouter>
         <Provider itemStore={itemStore}>
-          <div className="App">
+          <AppWrapper>
             <Nav />
             <Switch>
               <Route path="/" key="top" exact component={Feed} />
@@ -37,7 +42,7 @@ class App extends Component {
                 )}
               />
             </Switch>
-          </div>
+          </AppWrapper>
         </Provider>
       </BrowserRouter>
     );

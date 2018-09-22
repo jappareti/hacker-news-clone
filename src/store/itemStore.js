@@ -1,4 +1,4 @@
-import { configure, decorate, observable, flow } from "mobx";
+import { configure, decorate, observable } from "mobx";
 
 configure({ enforceActions: "observed" });
 
@@ -20,7 +20,6 @@ class ItemStore {
   //     console.log(error);
   //   }
   // });
-
 
   // fetchNewestStories = flow(function*() {
   //   try {
@@ -48,7 +47,7 @@ class ItemStore {
 decorate(ItemStore, {
   items: observable,
   newestStories: observable,
-  topStories: observable,
+  topStories: observable
 });
 
 // export { ItemStore }
