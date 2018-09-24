@@ -76,12 +76,14 @@ const StoryFooter = styled.footer`
   }
 `;
 const Score = styled.span``;
-const UserLink = styled(Link)`
-  color: inherit;
+const UserLink = styled.span`
   padding: 0em 0.3em;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
+  a {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 const TimeLink = styled(Link)`
@@ -119,14 +121,19 @@ class Story extends Component {
       return <div>Loading...</div>;
     }
 
+    const handleStoryClick = event => {
+      if (event.target.tagName !== "A") {
+        this.props.history.push(`/item/${item.id}`);
+      }
+    };
+
     return (
-      <StoryStyled
-        thread={this.props.thread}
-        onClick={() => this.props.history.push(`/item/${item.id}`)}
-      >
+      <StoryStyled thread={this.props.thread} onClick={handleStoryClick}>
         <StoryHeader>
           <Score>{item.score} points</Score>
-          <UserLink to="test">by {item.by}</UserLink>
+          <UserLink>
+            by <Link to={`/user/${item.by}`}>{item.by}</Link>
+          </UserLink>
           <TimeLink to={`/item/${item.id}`}>
             {moment.unix(item.time).fromNow()}
           </TimeLink>
@@ -146,7 +153,7 @@ class Story extends Component {
         {/* Render the children (comments) if it's a thread and if there are children to be rendered */}
         {this.props.thread &&
           (item.kids !== undefined && item.kids.length > 0) &&
-          item.kids.map(id => <Item key={id} id={id} thread />)}
+          item.kids.map(id => <Item key={id} id={id} depth={1} thread />)}
       </StoryStyled>
     );
   }

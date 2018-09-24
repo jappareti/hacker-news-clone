@@ -40,13 +40,14 @@ class Item extends Component {
 
   render() {
     const { item } = this;
+    const depth = this.props.depth || 0;
 
     if (Object.keys(item).length === 0) {
       return <ItemStyled>Loading...</ItemStyled>;
     }
 
     if (item.type === "comment") {
-      return <Comment item={item} key={item.id} id={item.id} />;
+      return <Comment item={item} key={item.id} id={item.id} depth={depth} />;
     }
 
     return (
