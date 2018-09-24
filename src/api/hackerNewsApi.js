@@ -17,4 +17,9 @@ const fetchItem = id =>
     .then(handleErrors)
     .then(response => response);
 
-export { fetchStories, fetchItem };
+const fetchUser = id =>
+  fetch(`${URL}/user/${id}.json`)
+    .then(handleErrors)
+    .then(response => response);
+
+export { fetchStories, fetchItem, fetchUser };

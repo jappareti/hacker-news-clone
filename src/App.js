@@ -10,6 +10,8 @@ import { breakpoints, media } from "./theme/globalStyles";
 import Nav from "./Nav";
 import Feed from "./Feed";
 import Item from "./Item";
+import User from "./User";
+import UserFeed from "./UserFeed";
 
 const AppWrapper = styled.div`
   margin: 20px auto;
@@ -41,6 +43,8 @@ class App extends Component {
                   />
                 )}
               />
+              <Route path="/user/:id" component={User} />
+              <Route path="/submitted/:id" component={UserFeed} />
             </Switch>
           </AppWrapper>
         </Provider>

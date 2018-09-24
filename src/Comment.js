@@ -11,6 +11,7 @@ const CommentStyled = styled.div`
   position: relative;
   padding-left: 1em;
   margin-bottom: 1em;
+  background: rgba(255, 255, 255, 0.8);
 `;
 const ThreadLineContainer = styled.div`
   box-sizing: border-box;
@@ -114,7 +115,7 @@ class Comment extends Component {
   isCollapsed = () => (this.state.collapsed ? "collapsed" : "");
 
   render() {
-    const { item } = this.props;
+    const { item, depth } = this.props;
     const { collapsed } = this.state;
 
     if (Object.keys(item).length === 0) {
@@ -122,12 +123,14 @@ class Comment extends Component {
     }
 
     return (
-      <CommentStyled collapsed={collapsed}>
-        <ThreadLineContainer onClick={this.toggleComment}>
-          <Threadline collapsed={collapsed} />
-        </ThreadLineContainer>
+      <CommentStyled collapsed={collapsed} depth={depth}>
+        {depth > 0 && (
+          <ThreadLineContainer onClick={this.toggleComment}>
+            <Threadline collapsed={collapsed} />
+          </ThreadLineContainer>
+        )}
         <CommentHeader>
-          <UserLink to={"test"}>{item.by}</UserLink>
+          <UserLink to={`/user/${item.by}`}>{item.by}</UserLink>
           <CommentLink to={`/item/${item.id}`}>
             {moment.unix(item.time).fromNow()}
           </CommentLink>
@@ -139,7 +142,9 @@ class Comment extends Component {
         {item.kids !== undefined &&
           item.kids.length > 0 &&
           !collapsed &&
-          item.kids.map(id => <Item key={id} id={id} thread />)}
+          item.kids.map(id => (
+            <Item key={id} id={id} depth={depth + 1} thread />
+          ))}
       </CommentStyled>
     );
   }
