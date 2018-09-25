@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 import styled from "styled-components";
 import Item from "./Item";
-
-import moment from "moment";
+import UserLink from "./UserLink";
 
 import { fontSizes, media, breakpoints } from "./theme/globalStyles";
 
@@ -84,11 +84,13 @@ const CommentBody = styled.article`
   `};
 `;
 const CommentFooter = styled.footer``;
-const UserLink = styled(Link)`
-  color: #fd6923;
-  font-weight: bold;
-  padding-right: 5px;
-  text-decoration: none;
+const UserLinkStyled = styled(UserLink)`
+  a {
+    color: #fd6923;
+    font-weight: bold;
+    padding-right: 5px;
+    text-decoration: none;
+  }
   &:hover {
     text-decoration: underline;
   }
@@ -130,7 +132,7 @@ class Comment extends Component {
           </ThreadLineContainer>
         )}
         <CommentHeader>
-          <UserLink to={`/user/${item.by}`}>{item.by}</UserLink>
+          <UserLinkStyled userId={item.by}>{item.by}</UserLinkStyled>
           <CommentLink to={`/item/${item.id}`}>
             {moment.unix(item.time).fromNow()}
           </CommentLink>

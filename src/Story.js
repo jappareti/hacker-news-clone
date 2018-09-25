@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 
 import moment from "moment";
 
 import Item from "./Item";
+import UserLink from "./UserLink";
 
 import { fontSizes, media, breakpoints } from "./theme/globalStyles";
 
@@ -76,16 +76,7 @@ const StoryFooter = styled.footer`
   }
 `;
 const Score = styled.span``;
-const UserLink = styled.span`
-  padding: 0em 0.3em;
-  a {
-    color: inherit;
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
+
 const TimeLink = styled(Link)`
   color: #a3a3a3;
   text-decoration: none;
@@ -102,6 +93,16 @@ const CommentsLink = styled(Link)`
   }
 `;
 
+const UserLinkStyled = styled(UserLink)`
+  a {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
 const shortenURL = url => {
   return `${url.replace(/https?:\/\//, "").substring(0, 40)}...`;
 };
@@ -110,9 +111,17 @@ class Story extends Component {
   state = {
     error: null,
     collapsed: false
+    // showUserPopup: false
   };
 
   item = {};
+  user = {};
+
+  handleStoryClick = event => {
+    if (event.target.tagName !== "A") {
+      this.props.history.push(`/item/${this.props.item.id}`);
+    }
+  };
 
   render() {
     const { item } = this.props;
@@ -121,19 +130,14 @@ class Story extends Component {
       return <div>Loading...</div>;
     }
 
-    const handleStoryClick = event => {
-      if (event.target.tagName !== "A") {
-        this.props.history.push(`/item/${item.id}`);
-      }
-    };
-
     return (
-      <StoryStyled thread={this.props.thread} onClick={handleStoryClick}>
+      <StoryStyled
+        thread={this.props.thread}
+        onClick={this.handleStoryClick.bind(this)}
+      >
         <StoryHeader>
-          <Score>{item.score} points</Score>
-          <UserLink>
-            by <Link to={`/user/${item.by}`}>{item.by}</Link>
-          </UserLink>
+          <Score>{item.score} points</Score> by{" "}
+          <UserLinkStyled key={item.by} userId={item.by} />{" "}
           <TimeLink to={`/item/${item.id}`}>
             {moment.unix(item.time).fromNow()}
           </TimeLink>
