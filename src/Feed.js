@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { fetchStories } from "./api/hackerNewsApi";
+import firebase from "./firebase";
 
 import Item from "./Item";
 
@@ -32,9 +32,13 @@ class Feed extends Component {
         break;
     }
     try {
-      const response = await fetchStories(feedType);
-      const stories = await response.json();
-      this.setState({ stories });
+      this.firebaseRef = firebase
+        .database()
+        .ref("/v0")
+        .child(feedType);
+      this.firebaseCallback = this.firebaseRef.on("value", snap => {
+        this.setState({ stories: snap.val() });
+      });
     } catch (error) {
       console.log(error);
     }

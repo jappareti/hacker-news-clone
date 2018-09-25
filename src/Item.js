@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-import { fetchItem } from "./api/hackerNewsApi";
+import firebase from "./firebase";
 
 import Story from "./Story";
 import Comment from "./Comment";
@@ -20,18 +20,20 @@ const ItemStyled = styled.div`
 
 class Item extends Component {
   state = {
-    error: null
+    error: null,
+    item: {}
   };
-
-  item = {};
 
   async componentDidMount() {
     const { id } = this.props;
     try {
-      const response = await fetchItem(id);
-      const item = await response.json();
-      this.item = item;
-      this.forceUpdate();
+      this.firebaseRef = firebase
+        .database()
+        .ref("/v0")
+        .child(`item/${id}`);
+      this.firebaseCallback = this.firebaseRef.on("value", snap => {
+        this.setState({ item: snap.val() });
+      });
     } catch (error) {
       console.log(error);
       this.setState({ error });
@@ -39,7 +41,7 @@ class Item extends Component {
   }
 
   render() {
-    const { item } = this;
+    const { item } = this.state;
     const depth = this.props.depth || 0;
 
     if (Object.keys(item).length === 0) {
