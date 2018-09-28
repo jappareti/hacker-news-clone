@@ -32,7 +32,10 @@ class Item extends Component {
         .ref("/v0")
         .child(`item/${id}`)
         .on("value", snap => {
-          this.setState({ item: snap.val() });
+          const item = snap.val();
+          if (item !== null) {
+            this.setState({ item: snap.val() });
+          }
         });
     } catch (error) {
       console.log(error);
