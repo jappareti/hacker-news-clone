@@ -24,20 +24,29 @@ class Item extends Component {
     item: {}
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { id } = this.props;
     try {
-      this.firebaseRef = firebase
+      firebase
         .database()
         .ref("/v0")
-        .child(`item/${id}`);
-      this.firebaseCallback = this.firebaseRef.on("value", snap => {
-        this.setState({ item: snap.val() });
-      });
+        .child(`item/${id}`)
+        .on("value", snap => {
+          this.setState({ item: snap.val() });
+        });
     } catch (error) {
       console.log(error);
       this.setState({ error });
     }
+  }
+
+  componentWillUnmount() {
+    const { id } = this.props;
+    firebase
+      .database()
+      .ref("/v0")
+      .child(`item/${id}`)
+      .off();
   }
 
   render() {
