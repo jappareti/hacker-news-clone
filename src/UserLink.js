@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import posed, { PoseGroup } from "react-pose";
 import styled from "styled-components";
 import moment from "moment";
-import { fetchUser } from "./api/hackerNewsApi";
+// import { fetchUser } from "./api/hackerNewsApi";
+import firebase from "./firebase";
 
 const UserPopup = posed.div({
   enter: {
@@ -50,10 +51,15 @@ class UserLink extends Component {
     // If we haven't fetched the user yet
     if (Object.keys(this.state.user).length === 0) {
       try {
-        const response = await fetchUser(id);
-        const user = await response.json();
-        // this.user = user;
-        this.setState({ showUserPopup: true, user, popupPosX });
+        this.firebaseRef = firebase
+          .database()
+          .ref("/v0")
+          .child(`user/${id}`);
+        this.firebaseCallback = this.firebaseRef.on("value", snap => {
+          this.setState({ user: snap.val(), showUserPopup: true, popupPosX });
+        });
+
+        // this.setState({ showUserPopup: true, user, popupPosX });
       } catch (error) {
         console.log(error);
         this.setState({ error });

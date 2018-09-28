@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { fetchStories } from "./api/hackerNewsApi";
+import firebase from "./firebase";
 
 import Item from "./Item";
 
@@ -9,35 +9,47 @@ class Feed extends Component {
     min: 0,
     max: 30
   };
-  async componentDidMount() {
+  feedType;
+  componentDidMount() {
     // Determine which items to fetch based on path
-    let feedType;
     switch (this.props.location.pathname) {
       case "/":
-        feedType = "topstories";
+        this.feedType = "topstories";
         break;
       case "/newest":
-        feedType = "newstories";
+        this.feedType = "newstories";
         break;
       case "/ask":
-        feedType = "askstories";
+        this.feedType = "askstories";
         break;
       case "/show":
-        feedType = "showstories";
+        this.feedType = "showstories";
         break;
       case "/jobs":
-        feedType = "jobstories";
+        this.feedType = "jobstories";
         break;
       default:
         break;
     }
     try {
-      const response = await fetchStories(feedType);
-      const stories = await response.json();
-      this.setState({ stories });
+      firebase
+        .database()
+        .ref("/v0")
+        .child(`${this.feedType}`)
+        .on("value", snap => {
+          this.setState({ stories: snap.val() });
+        });
     } catch (error) {
       console.log(error);
     }
+  }
+
+  componentWillUnmount() {
+    firebase
+      .database()
+      .ref("/v0")
+      .child(`${this.feedType}`)
+      .off();
   }
 
   render() {

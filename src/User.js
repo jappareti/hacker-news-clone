@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment";
 
-import { fetchUser } from "./api/hackerNewsApi";
+import firebase from "./firebase";
 
 const UserStyled = styled.div`
   background: rgba(255, 255, 255, 0.8);
@@ -18,18 +18,21 @@ const UserStyled = styled.div`
 
 class User extends Component {
   state = {
-    error: null
+    error: null,
+    user: {}
   };
-
-  user = {};
 
   async componentDidMount() {
     const { id } = this.props.match.params;
+
     try {
-      const response = await fetchUser(id);
-      const user = await response.json();
-      this.user = user;
-      this.forceUpdate();
+      this.firebaseRef = firebase
+        .database()
+        .ref("/v0")
+        .child(`user/${id}`);
+      this.firebaseCallback = this.firebaseRef.on("value", snap => {
+        this.setState({ user: snap.val() });
+      });
     } catch (error) {
       console.log(error);
       this.setState({ error });
@@ -37,7 +40,7 @@ class User extends Component {
   }
 
   render() {
-    const { user } = this;
+    const { user } = this.state;
 
     if (Object.keys(user).length === 0) {
       return <UserStyled>Loading...</UserStyled>;

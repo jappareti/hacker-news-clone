@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { fetchUser } from "./api/hackerNewsApi";
+// import { fetchUser } from "./api/hackerNewsApi";
+import firebase from "./firebase";
 
 import Item from "./Item";
 
@@ -10,10 +11,15 @@ class Feed extends Component {
     max: 30
   };
   async componentDidMount() {
+    const { id } = this.props.match.params;
     try {
-      const response = await fetchUser(this.props.match.params.id);
-      const user = await response.json();
-      this.setState({ stories: user.submitted });
+      this.firebaseRef = firebase
+        .database()
+        .ref("/v0")
+        .child(`user/${id}`);
+      this.firebaseCallback = this.firebaseRef.on("value", snap => {
+        this.setState({ stories: snap.val().submitted });
+      });
     } catch (error) {
       console.log(error);
     }
