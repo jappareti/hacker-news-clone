@@ -118,7 +118,7 @@ class Story extends Component {
   user = {};
 
   handleStoryClick = event => {
-    if (event.target.tagName !== "A") {
+    if (event.target.tagName !== "A" && !this.props.thread) {
       this.props.history.push(`/item/${this.props.item.id}`);
     }
   };
